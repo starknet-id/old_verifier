@@ -6,7 +6,7 @@ from starkware.cairo.common.signature import verify_ecdsa_signature
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.uint256 import Uint256
 
-const STARKNETID_CONTRACT = 0x027cac460bfddb38ee6403490fb23836dc047410edcf6cba5167ef04cfe2e821
+const STARKNETID_CONTRACT = 0x02362b9eb2edf06e2dcbed55cc0ea98d0d69572da5a4922387cc60d25d8dd9ea
 const PUBLIC_KEY = 1576987121283045618657875225183003300580199140020787494777499595331436496159
 
 @contract_interface
