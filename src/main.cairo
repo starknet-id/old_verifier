@@ -15,7 +15,7 @@ func blacklisted_point(r) -> (blacklisted: felt) {
 
 @contract_interface
 namespace StarknetID {
-    func ownerOf(token_id: felt) -> (owner: felt) {
+    func owner_of(token_id: felt) -> (owner: felt) {
     }
 
     func set_verifier_data(token_id: felt, field: felt, data: felt) {
@@ -27,7 +27,8 @@ func write_confirmation{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }(token_id: felt, timestamp: felt, field: felt, data: felt, sig: (felt, felt)) {
     let (caller) = get_caller_address();
-    let (owner) = StarknetID.ownerOf(STARKNETID_CONTRACT, token_id);
+    %{ print("toto2:", ids.STARKNETID_CONTRACT) %}
+    let (owner) = StarknetID.owner_of(STARKNETID_CONTRACT, token_id);
 
     assert caller = owner;
 
@@ -41,8 +42,8 @@ func write_confirmation{
     // to anyone willing to improve this check in the future, please be careful with s, as (r, -s) is also a valid signature
     blacklisted_point.write(sig[0], 1);
 
-    // message_hash = hash2(hash2(hash2(token_id, 0), field), data)
-    let (message_hash) = hash2{hash_ptr=pedersen_ptr}(token_id, 0);
+    // message_hash = hash2(hash2(hash2(token_id, timestamp), field), data)
+    let (message_hash) = hash2{hash_ptr=pedersen_ptr}(token_id, timestamp);
     let (message_hash) = hash2{hash_ptr=pedersen_ptr}(message_hash, field);
     let (message_hash) = hash2{hash_ptr=pedersen_ptr}(message_hash, data);
     verify_ecdsa_signature(message_hash, PUBLIC_KEY, sig[0], sig[1]);

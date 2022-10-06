@@ -9,15 +9,16 @@ func test_write_confirmation{
 }() {
     %{
         stop_prank_callable = start_prank(123)
-        stop_mock1 = mock_call(ids.STARKNETID_CONTRACT, "ownerOf", [123])
+        print("toto1:", ids.STARKNETID_CONTRACT)
+        stop_mock1 = mock_call(ids.STARKNETID_CONTRACT, "owner_of", [123])
         stop_mock2 = mock_call(ids.STARKNETID_CONTRACT, "set_verifier_data", [])
     %}
     write_confirmation(
-        Uint256(2, 0),
-        28263441981469284,
+        1,
+        2 ** 128,
+        32782392107492722,
         707979046952239197,
-        (2821958939906103345738727000786131687662016840051168144541666097455074829329,
-        874880325578455688131058050225162104651905718549748884038073811297955143089),
+        (242178274510413660320776612725275530442992398463760124282759555533509261346, 3369339735225989044856582139053547932849348534803432731455132141425388526099),
     );
     %{
         stop_prank_callable()
