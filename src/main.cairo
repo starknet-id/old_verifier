@@ -6,11 +6,25 @@ from starkware.cairo.common.signature import verify_ecdsa_signature
 from starkware.starknet.common.syscalls import get_caller_address, get_block_timestamp
 from starkware.cairo.common.math import assert_le_felt
 
-const STARKNETID_CONTRACT = 0x0798e884450c19e072d6620fefdbeb7387d0453d3fd51d95f5ace1f17633d88b;
-const PUBLIC_KEY = 1576987121283045618657875225183003300580199140020787494777499595331436496159;
-
 @storage_var
 func blacklisted_point(r) -> (blacklisted: felt) {
+}
+
+@storage_var
+func _starknetid_contract() -> (starknetid_contract: felt) {
+}
+
+@storage_var
+func _public_key() -> (public_key: felt) {
+}
+
+@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    starknetid_contract, public_key
+) {
+    _starknetid_contract.write(starknetid_contract);
+    _public_key.write(public_key);
+    return ();
 }
 
 @contract_interface
@@ -27,8 +41,8 @@ func write_confirmation{
     syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr, ecdsa_ptr: SignatureBuiltin*
 }(token_id: felt, timestamp: felt, field: felt, data: felt, sig: (felt, felt)) {
     let (caller) = get_caller_address();
-    %{ print("toto2:", ids.STARKNETID_CONTRACT) %}
-    let (owner) = StarknetID.owner_of(STARKNETID_CONTRACT, token_id);
+    let (starknetid_contract) = _starknetid_contract.read();
+    let (owner) = StarknetID.owner_of(starknetid_contract, token_id);
 
     assert caller = owner;
 
@@ -46,7 +60,8 @@ func write_confirmation{
     let (message_hash) = hash2{hash_ptr=pedersen_ptr}(token_id, timestamp);
     let (message_hash) = hash2{hash_ptr=pedersen_ptr}(message_hash, field);
     let (message_hash) = hash2{hash_ptr=pedersen_ptr}(message_hash, data);
-    verify_ecdsa_signature(message_hash, PUBLIC_KEY, sig[0], sig[1]);
-    StarknetID.set_verifier_data(STARKNETID_CONTRACT, token_id, field, data);
+    let (public_key) = _public_key.read();
+    verify_ecdsa_signature(message_hash, public_key, sig[0], sig[1]);
+    StarknetID.set_verifier_data(starknetid_contract, token_id, field, data);
     return ();
 }
