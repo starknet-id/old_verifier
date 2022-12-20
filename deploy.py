@@ -20,7 +20,7 @@ network_base_url = "https://alpha4.starknet.io/"
 chainid: StarknetChainId = StarknetChainId.TESTNET
 max_fee = int(1e16)
 deployer = Deployer()
-starknetid_contract = 0x05DBDEDC203E92749E2E746E2D40A768D966BD243DF04A6B712E222BC040A9AF
+starknetid_contract = 0x783a9097b26eae0586373b2ce0ed3529ddc44069d1e0fbc4f66d42b69d6850d
 public_key = (
     1576987121283045618657875225183003300580199140020787494777499595331436496159
 )
