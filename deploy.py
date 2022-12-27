@@ -1,7 +1,6 @@
 from starknet_py.net.models.chains import StarknetChainId
 from starknet_py.net.gateway_client import GatewayClient
 from starknet_py.net.udc_deployer.deployer import Deployer
-from starknet_py.compile.compiler import create_contract_class
 from starknet_py.net import AccountClient, KeyPair
 import asyncio
 import json
@@ -20,7 +19,7 @@ network_base_url = "https://alpha4.starknet.io/"
 chainid: StarknetChainId = StarknetChainId.TESTNET
 max_fee = int(1e16)
 deployer = Deployer()
-starknetid_contract = 0x783a9097b26eae0586373b2ce0ed3529ddc44069d1e0fbc4f66d42b69d6850d
+starknetid_contract = 0x783A9097B26EAE0586373B2CE0ED3529DDC44069D1E0FBC4F66D42B69D6850D
 public_key = (
     1576987121283045618657875225183003300580199140020787494777499595331436496159
 )
